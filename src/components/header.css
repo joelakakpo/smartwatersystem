@@ -1,0 +1,121 @@
+.top-left-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 32px;              /* slightly reduced padding for balance */
+  background-color: #b9ddf5;       /* soft water-themed background */
+  border-bottom: 3px solid #dbeafe;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  min-height: 5px;                /* consistent header height */
+  position: relative;              /* stays in normal flow */
+  z-index: 1000;                 /* sits above content but doesn’t overlap */
+}
+
+/* Left side: logo + title */
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon-svg {
+  display: block;
+  width: 90px !important;   /* now this will apply */
+  height: 80px !important;   /* keeps aspect ratio */
+  max-height: 1900px;
+  margin: 0;
+  margin-left: -30px;
+  margin-bottom: -30px;
+}
+
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: -10px;
+  margin-bottom: -30px;
+}
+
+.brand-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: #073047;
+  margin: 0;
+  margin-top: -30px;
+  line-height: 0.4;       /* improved readability */
+}
+
+.brand-subtitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3b525f;
+  margin: 4px 0 0 0;     /* clean spacing */
+  line-height: 1.9;       /* tighter vertical spacing */
+}
+
+
+/* Right side: date + profile */
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.brand-date {
+  font-size: 10px;
+  font-weight: 500;
+  color: #1e3a8a;
+  margin-right: -70px;
+}
+
+/* Profile block */
+.profile-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -20px;
+}
+
+.profile-icon {
+  width: 44px;
+  height: 44px;
+  background-color: #0ea5c9;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #073047;
+}
+
+.profile-role {
+  font-size: 12px;
+  font-weight: 500;
+  color: #3b525f;
+}
