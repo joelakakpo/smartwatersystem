@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from processor import process_value
+from  processor import process_value
 import serial
 import threading
 import time
@@ -37,34 +37,58 @@ def read_sensor():
         try:
             line = ser.readline().decode(errors="ignore").strip()
 
-            # Only parse lines with ":"
-            if ":" in line:
-                parts = line.split(":")
-                if len(parts) == 2:
-                    try:
-                        value = float(parts[1])
-                        # Process value through ML + average
-                        prediction, avg = process_value(value)
+            # Split by pipe into key:value pairs
+            parts = line.split("|")
+            data = {}
+            for part in parts:
+                part = part.strip()
+                if ":" in part:
+                    key, value = part.split(":", 1)
+                    data[key.strip()] = value.strip()
 
-                        # Update latest_data dictionary
-                        latest_data["value"] = value
-                        latest_data["prediction"] = float(prediction)
-                        latest_data["average"] = float(avg)
+            # Check if all required fields are present
+            required = ["T", "pH", "TDS", "V_T", "NTU"]
+            if all(field in data for field in required):
+                try:
+                    temp = float(data["T"])
+                    ph = float(data["pH"])
+                    tds = float(data["TDS"])
+                    vt = float(data["V_T"])
+                    ntu = float(data["NTU"])
 
-                        # Optional: print to console
-                        print(f"Value: {value}, Prediction: {prediction}, Average: {avg}")
+                    # Define safe ranges (example thresholds)
+                    safe_temp = temp < 35
+                    safe_ph = 6.5 <= ph <= 8.5
+                    safe_tds = tds < 500
+                    safe_vt = vt < 5
+                    safe_ntu = ntu < 1000
 
-                    except ValueError:
-                        print("Invalid number format:", parts[1])
-                else:
-                    print("Invalid line format:", line)
+                    if all([safe_temp, safe_ph, safe_tds, safe_vt, safe_ntu]):
+                        prediction = "Safe"
+                    else:
+                        prediction = "Unsafe"
+
+                    # Update latest_data
+                    latest_data["temperature"] = temp
+                    latest_data["pH"] = ph
+                    latest_data["TDS"] = tds
+                    latest_data["V_T"] = vt
+                    latest_data["NTU"] = ntu
+                    latest_data["prediction"] = prediction
+
+                    # Print values + Safe/Unsafe
+                    print(f"T={temp}, pH={ph}, TDS={tds}, V_T={vt}, NTU={ntu}")
+                    print(f"Prediction: {prediction}")
+                except ValueError:
+                    print("Invalid number format in:", data)
             else:
-                print("Skipped line (no colon):", line)
+                print("Line parsed but missing required fields:", data)
 
         except Exception as e:
             print("Error reading serial:", e)
 
-        time.sleep(0.5)  # small delay to reduce CPU usage
+        time.sleep(0.5)
+
 
 # ------------------------------
 # Start background thread
